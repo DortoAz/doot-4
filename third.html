@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DORTO | تأكيد الطلب</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --gold: #C9A84C; --gold-light: #e8c96e; --dark: #0f0f0f; --dark2: #1a1a1a;
+      --cream: #f8f5ef; --warm-white: #fdfcfa; --text: #2a2a2a;
+      --muted: #888; --border: rgba(201,168,76,0.2); --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Cairo', sans-serif; direction: rtl; color: var(--text); background: var(--warm-white); min-height: 100vh; }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--dark); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+
+    /* HEADER */
+    header { background: var(--dark2); border-bottom: 1px solid var(--border); }
+    .navbar { display: flex; align-items: center; justify-content: space-between; max-width: 1400px; margin: 0 auto; padding: 18px 40px; }
+    .nav-logo { font-family: 'Playfair Display', serif; font-size: 30px; color: var(--gold); letter-spacing: 5px; text-decoration: none; }
+    .nav-logo span { color: white; font-size: 11px; letter-spacing: 4px; display: block; text-align: center; font-family: 'Cairo', sans-serif; font-weight: 300; margin-top: -4px; }
+
+    /* STEPS */
+    .steps-bar { background: white; border-bottom: 1px solid #eee; padding: 22px 40px; }
+    .steps-inner { max-width: 800px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 0; }
+    .step { display: flex; align-items: center; gap: 10px; flex: 1; }
+    .step-num { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; border: 2px solid #ddd; color: #aaa; transition: all var(--transition); flex-shrink: 0; }
+    .step.done .step-num { background: var(--dark); border-color: var(--dark); color: var(--gold); }
+    .step-label { font-size: 13px; color: #aaa; font-weight: 500; }
+    .step.done .step-label { color: var(--dark); font-weight: 700; }
+    .step-line { flex: 1; height: 2px; background: var(--gold); margin: 0 10px; }
+
+    /* SUCCESS HERO */
+    .success-hero { background: linear-gradient(135deg, var(--dark) 0%, #1a1a2e 100%); padding: 80px 40px; text-align: center; position: relative; overflow: hidden; }
+    .success-hero::before { content: '✓'; position: absolute; font-size: 300px; color: rgba(201,168,76,0.04); top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: Arial; line-height: 1; }
+    .success-icon { width: 100px; height: 100px; background: linear-gradient(135deg, var(--gold), var(--gold-light)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 28px; font-size: 42px; color: var(--dark); box-shadow: 0 0 0 15px rgba(201,168,76,0.12), 0 0 0 30px rgba(201,168,76,0.06); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { box-shadow: 0 0 0 15px rgba(201,168,76,0.12), 0 0 0 30px rgba(201,168,76,0.06); } 50% { box-shadow: 0 0 0 20px rgba(201,168,76,0.18), 0 0 0 40px rgba(201,168,76,0.08); } }
+    .success-hero h1 { font-family: 'Playfair Display', serif; font-size: 48px; color: white; margin-bottom: 14px; }
+    .success-hero h1 em { color: var(--gold); font-style: normal; }
+    .success-hero p { font-size: 17px; color: #aaa; max-width: 550px; margin: 0 auto; line-height: 1.8; }
+    .order-num-badge { display: inline-flex; align-items: center; gap: 10px; background: rgba(201,168,76,0.12); border: 1px solid var(--border); border-radius: 4px; padding: 12px 24px; margin-top: 28px; color: var(--gold); font-size: 16px; font-weight: 700; letter-spacing: 2px; }
+
+    /* MAIN LAYOUT */
+    .confirm-layout { max-width: 1100px; margin: 50px auto; padding: 0 40px; display: grid; grid-template-columns: 1fr 380px; gap: 35px; align-items: start; }
+
+    /* CARDS */
+    .confirm-card { background: white; border-radius: 8px; border: 1px solid #eee; overflow: hidden; margin-bottom: 24px; }
+    .confirm-card:last-child { margin-bottom: 0; }
+    .card-header { background: var(--dark); color: white; padding: 18px 26px; display: flex; align-items: center; gap: 10px; }
+    .card-header i { color: var(--gold); font-size: 16px; }
+    .card-header h3 { font-size: 15px; font-weight: 700; }
+    .card-body { padding: 24px 26px; }
+
+    /* CUSTOMER INFO */
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .info-item label { font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 5px; }
+    .info-item span { font-size: 15px; font-weight: 600; color: var(--dark); }
+
+    /* ORDER ITEMS */
+    .order-items-list { }
+    .order-item-row { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid #f5f5f5; }
+    .order-item-row:last-child { border-bottom: none; }
+    .order-item-row img { width: 64px; height: 80px; object-fit: cover; border-radius: 3px; background: #f0ece4; flex-shrink: 0; }
+    .order-item-details { flex: 1; }
+    .order-item-name { font-size: 14px; font-weight: 600; color: var(--dark); margin-bottom: 5px; }
+    .order-item-meta { font-size: 12px; color: var(--muted); }
+    .order-item-price { font-size: 16px; font-weight: 700; color: var(--gold); white-space: nowrap; font-family: 'Playfair Display', serif; }
+
+    /* TOTALS */
+    .totals-table { width: 100%; }
+    .totals-row { display: flex; justify-content: space-between; padding: 10px 0; font-size: 14px; border-bottom: 1px solid #f5f5f5; }
+    .totals-row.grand { padding-top: 16px; border-bottom: none; border-top: 2px solid #eee; margin-top: 6px; font-size: 18px; font-weight: 700; }
+    .totals-row.grand .amount { color: var(--gold); font-family: 'Playfair Display', serif; font-size: 24px; }
+    .free-tag { color: #27ae60; font-weight: 600; }
+
+    /* TIMELINE */
+    .timeline { }
+    .timeline-item { display: flex; gap: 18px; padding-bottom: 28px; position: relative; }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-item::before { content: ''; position: absolute; top: 36px; right: 18px; width: 2px; height: calc(100% - 10px); background: #eee; }
+    .timeline-item:last-child::before { display: none; }
+    .timeline-dot { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; border: 2px solid #eee; color: #ccc; background: white; }
+    .timeline-dot.active { background: var(--gold); border-color: var(--gold); color: var(--dark); }
+    .timeline-dot.current { background: var(--dark); border-color: var(--dark); color: var(--gold); }
+    .timeline-content { flex: 1; }
+    .timeline-title { font-size: 14px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+    .timeline-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .timeline-time { font-size: 11px; color: var(--gold); margin-top: 4px; font-weight: 600; }
+
+    /* SIDEBAR */
+    .sidebar-card { background: white; border-radius: 8px; border: 1px solid #eee; overflow: hidden; margin-bottom: 20px; }
+    .sidebar-card:last-child { margin-bottom: 0; }
+
+    /* ACTIONS */
+    .action-buttons { display: flex; flex-direction: column; gap: 12px; padding: 20px; }
+    .btn-primary { display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--gold); color: var(--dark); border: none; padding: 16px; font-family: 'Cairo', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; border-radius: 4px; text-decoration: none; transition: all var(--transition); }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .btn-secondary { display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--dark); color: white; border: none; padding: 14px; font-family: 'Cairo', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 4px; text-decoration: none; transition: all var(--transition); }
+    .btn-secondary:hover { background: #2a2a2a; }
+    .btn-wa { display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, #25d366, #128c7e); color: white; border: none; padding: 14px; font-family: 'Cairo', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 4px; text-decoration: none; transition: all var(--transition); }
+    .btn-wa:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,211,102,0.35); }
+
+    /* CONTACT CARD */
+    .contact-items { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+    .contact-row { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--dark); }
+    .contact-row i { width: 32px; height: 32px; background: var(--cream); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 13px; flex-shrink: 0; }
+    .contact-row a { color: var(--dark); text-decoration: none; transition: color var(--transition); }
+    .contact-row a:hover { color: var(--gold); }
+
+    /* SHARE */
+    .share-section { padding: 20px; text-align: center; }
+    .share-section p { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+    .share-btns { display: flex; gap: 10px; justify-content: center; }
+    .share-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #eee; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; text-decoration: none; transition: all var(--transition); color: #555; background: white; }
+    .share-btn:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+    /* CONFETTI ANIMATION */
+    .confetti-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; overflow: hidden; }
+    .confetti-piece { position: absolute; width: 10px; height: 10px; top: -10px; opacity: 0; animation: confettiFall linear forwards; border-radius: 2px; }
+    @keyframes confettiFall { 0% { top: -10px; opacity: 1; transform: rotate(0deg) translateX(0); } 100% { top: 100vh; opacity: 0; transform: rotate(720deg) translateX(var(--drift)); } }
+
+    @media (max-width: 1024px) { .confirm-layout { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) {
+      .navbar { padding: 14px 20px; }
+      .confirm-layout { padding: 0 16px; margin: 24px auto; }
+      .info-grid { grid-template-columns: 1fr; }
+      .steps-bar { padding: 16px 20px; }
+      .success-hero { padding: 50px 20px; }
+      .success-hero h1 { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="confettiContainer" class="confetti-container"></div>
+
+<header>
+  <nav class="navbar">
+    <a href="./index.html" style="color:#ccc;text-decoration:none;font-size:14px;display:flex;align-items:center;gap:8px;transition:color 0.3s" onmouseover="this.style.color='#C9A84C'" onmouseout="this.style.color='#ccc'">
+      <i class="fas fa-arrow-right"></i> العودة للمتجر
+    </a>
+    <a href="./index.html" class="nav-logo">DORTO <span>أزياء راقية</span></a>
+    <a href="https://wa.me/212714699463" target="_blank" style="color:#25d366;font-size:22px;text-decoration:none;">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+  </nav>
+</header>
+
+<div class="steps-bar">
+  <div class="steps-inner">
+    <div class="step done">
+      <div class="step-num"><i class="fas fa-check"></i></div>
+      <div class="step-label">السلة</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step done">
+      <div class="step-num"><i class="fas fa-check"></i></div>
+      <div class="step-label">معلومات الشراء</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step done">
+      <div class="step-num"><i class="fas fa-check"></i></div>
+      <div class="step-label">تأكيد الطلب</div>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS HERO -->
+<div class="success-hero">
+  <div class="success-icon"><i class="fas fa-check"></i></div>
+  <h1>تم تأكيد <em>طلبك!</em></h1>
+  <p>شكراً لك على ثقتك بـ DORTO. طلبك قيد المعالجة وسيصلك في أقرب وقت.</p>
+  <div class="order-num-badge">
+    <i class="fas fa-hashtag"></i>
+    <span id="orderNumDisplay">DORTO-XXXXXX</span>
+  </div>
+</div>
+
+<div class="confirm-layout">
+
+  <!-- MAIN COLUMN -->
+  <div>
+
+    <!-- CUSTOMER INFO -->
+    <div class="confirm-card">
+      <div class="card-header">
+        <i class="fas fa-user"></i>
+        <h3>معلومات العميل</h3>
+      </div>
+      <div class="card-body">
+        <div class="info-grid" id="customerInfo">
+          <div class="info-item"><label>الاسم الكامل</label><span>—</span></div>
+          <div class="info-item"><label>رقم الهاتف</label><span>—</span></div>
+          <div class="info-item"><label>المدينة</label><span>—</span></div>
+          <div class="info-item"><label>طريقة الدفع</label><span>—</span></div>
+          <div class="info-item" style="grid-column:1/-1"><label>العنوان</label><span id="addressDisplay">—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDER ITEMS -->
+    <div class="confirm-card">
+      <div class="card-header">
+        <i class="fas fa-shopping-bag"></i>
+        <h3>المنتجات المطلوبة</h3>
+      </div>
+      <div class="card-body">
+        <div class="order-items-list" id="orderItemsList">
+          <p style="color:#bbb;text-align:center;padding:20px">لا توجد منتجات</p>
+        </div>
+        <div class="totals-table" id="totalsTable" style="margin-top:20px;padding-top:20px;border-top:1px solid #eee;display:none">
+          <div class="totals-row"><span>المجموع الفرعي</span><span id="subtotalDisplay">—</span></div>
+          <div class="totals-row"><span>تكلفة الشحن</span><span id="shippingDisplay" class="free-tag">—</span></div>
+          <div class="totals-row" id="discountRow" style="display:none"><span>الخصم المطبق</span><span id="discountDisplay" style="color:#27ae60">—</span></div>
+          <div class="totals-row grand"><span>الإجمالي النهائي</span><span class="amount" id="totalDisplay">—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRACKING TIMELINE -->
+    <div class="confirm-card">
+      <div class="card-header">
+        <i class="fas fa-route"></i>
+        <h3>مراحل تنفيذ الطلب</h3>
+      </div>
+      <div class="card-body">
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot active"><i class="fas fa-check"></i></div>
+            <div class="timeline-content">
+              <div class="timeline-title">تم استلام الطلب ✓</div>
+              <div class="timeline-desc">وصل طلبك بنجاح وأصبح قيد المعالجة من قِبل فريق DORTO.</div>
+              <div class="timeline-time" id="orderDate">الآن</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot current"><i class="fas fa-box"></i></div>
+            <div class="timeline-content">
+              <div class="timeline-title">تجهيز الطلب</div>
+              <div class="timeline-desc">يتم حالياً تجهيز منتجاتك وتغليفها بعناية من مستودعنا.</div>
+              <div class="timeline-time">خلال 24-48 ساعة</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"><i class="fas fa-truck"></i></div>
+            <div class="timeline-content">
+              <div class="timeline-title">في طريقه إليك</div>
+              <div class="timeline-desc">سيتم تسليم الطلب لشركة الشحن وستتلقى رسالة تأكيد.</div>
+              <div class="timeline-time">خلال 1-2 يوم عمل</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"><i class="fas fa-home"></i></div>
+            <div class="timeline-content">
+              <div class="timeline-title">التوصيل لباب منزلك</div>
+              <div class="timeline-desc">سيتواصل معك مندوب التوصيل قبل الوصول.</div>
+              <div class="timeline-time">خلال 2-5 أيام عمل</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="sidebar-card">
+      <div class="card-header" style="background:var(--dark)">
+        <i class="fas fa-bolt" style="color:var(--gold)"></i>
+        <h3>الخطوات التالية</h3>
+      </div>
+      <div class="action-buttons">
+        <a href="./index.html" class="btn-primary">
+          <i class="fas fa-shopping-bag"></i> مواصلة التسوق
+        </a>
+        <a href="https://wa.me/212714699463" target="_blank" class="btn-wa">
+          <i class="fab fa-whatsapp"></i> تتبع طلبك عبر WhatsApp
+        </a>
+        <button class="btn-secondary" onclick="window.print()">
+          <i class="fas fa-print"></i> طباعة تفاصيل الطلب
+        </button>
+      </div>
+    </div>
+
+    <!-- CONTACT INFO -->
+    <div class="sidebar-card">
+      <div class="card-header">
+        <i class="fas fa-headset"></i>
+        <h3>خدمة العملاء</h3>
+      </div>
+      <div class="contact-items">
+        <div class="contact-row">
+          <i class="fab fa-whatsapp" style="color:#25d366 !important;background:rgba(37,211,102,0.1) !important"></i>
+          <a href="https://wa.me/212714699463" target="_blank">0714 699 463 — واتساب</a>
+        </div>
+        <div class="contact-row">
+          <i class="fas fa-phone"></i>
+          <a href="tel:+212714699463">+212 7 14 699 463</a>
+        </div>
+        <div class="contact-row">
+          <i class="fas fa-envelope"></i>
+          <a href="mailto:contact@dorto.com">contact@dorto.com</a>
+        </div>
+        <div class="contact-row">
+          <i class="fas fa-clock"></i>
+          <span>دعم متاح 7/7 — 9ص إلى 9م</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SHARE -->
+    <div class="sidebar-card">
+      <div class="share-section">
+        <p>شارك تجربتك مع DORTO</p>
+        <div class="share-btns">
+          <a href="https://www.instagram.com" target="_blank" class="share-btn"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.facebook.com" target="_blank" class="share-btn"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://twitter.com" target="_blank" class="share-btn"><i class="fab fa-twitter"></i></a>
+          <a href="https://www.tiktok.com" target="_blank" class="share-btn"><i class="fab fa-tiktok"></i></a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Load order data
+  let order = null;
+  try {
+    const saved = localStorage.getItem('dorto_order');
+    if (saved) order = JSON.parse(saved);
+  } catch(e) {}
+
+  const paymentLabels = {
+    cod: 'الدفع عند الاستلام 📦',
+    bank: 'تحويل بنكي 🏦',
+    cmi: 'بطاقة مصرفية 💳',
+    wallet: 'محفظة إلكترونية 📱'
+  };
+
+  function renderOrder() {
+    if (!order) return;
+
+    // Order number
+    document.getElementById('orderNumDisplay').textContent = order.orderNum || 'DORTO-000000';
+
+    // Customer info
+    const c = order.customer || {};
+    document.getElementById('customerInfo').innerHTML = `
+      <div class="info-item"><label>الاسم الكامل</label><span>${(c.firstName||'') + ' ' + (c.lastName||'')}</span></div>
+      <div class="info-item"><label>رقم الهاتف</label><span>${c.phone||'—'}</span></div>
+      <div class="info-item"><label>المدينة</label><span>${c.city||'—'}</span></div>
+      <div class="info-item"><label>طريقة الدفع</label><span>${paymentLabels[order.payment] || '—'}</span></div>
+      <div class="info-item" style="grid-column:1/-1"><label>العنوان</label><span>${c.address||'—'}</span></div>
+      ${c.notes ? `<div class="info-item" style="grid-column:1/-1"><label>ملاحظات</label><span>${c.notes}</span></div>` : ''}
+    `;
+
+    // Items
+    if (order.cart && order.cart.length) {
+      document.getElementById('orderItemsList').innerHTML = order.cart.map(i => `
+        <div class="order-item-row">
+          <img src="${i.image}" alt="${i.name}">
+          <div class="order-item-details">
+            <div class="order-item-name">${i.name}</div>
+            <div class="order-item-meta">${i.category} &bull; الكمية: ${i.qty}</div>
+          </div>
+          <div class="order-item-price">${(i.price * i.qty).toLocaleString('ar')} MAD</div>
+        </div>
+      `).join('');
+
+      // Totals
+      const tot = document.getElementById('totalsTable');
+      tot.style.display = 'block';
+      document.getElementById('subtotalDisplay').textContent = (order.subtotal||0).toLocaleString('ar') + ' MAD';
+      const shipEl = document.getElementById('shippingDisplay');
+      if (!order.shipping) { shipEl.textContent = 'مجاني 🎉'; shipEl.className = 'free-tag'; }
+      else { shipEl.textContent = order.shipping + ' MAD'; shipEl.className = ''; }
+      if (order.discount > 0) {
+        document.getElementById('discountRow').style.display = 'flex';
+        document.getElementById('discountDisplay').textContent = '- ' + order.discount.toLocaleString('ar') + ' MAD';
+      }
+      document.getElementById('totalDisplay').textContent = (order.total||0).toLocaleString('ar') + ' MAD';
+    }
+
+    // Date
+    document.getElementById('orderDate').textContent = order.date || new Date().toLocaleDateString('ar-MA');
+  }
+
+  // Confetti animation
+  function launchConfetti() {
+    const colors = ['#C9A84C', '#e8c96e', '#f8f5ef', '#ffffff', '#ffd700'];
+    const container = document.getElementById('confettiContainer');
+    for (let i = 0; i < 60; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.cssText = `
+        left: ${Math.random() * 100}%;
+        background: ${colors[Math.floor(Math.random() * colors.length)]};
+        width: ${6 + Math.random() * 8}px;
+        height: ${6 + Math.random() * 8}px;
+        --drift: ${(Math.random() - 0.5) * 200}px;
+        animation-duration: ${2 + Math.random() * 2}s;
+        animation-delay: ${Math.random() * 1.5}s;
+        border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+      `;
+      container.appendChild(piece);
+    }
+    setTimeout(() => container.innerHTML = '', 5000);
+  }
+
+  renderOrder();
+  launchConfetti();
+</script>
+</body>
+</html>
